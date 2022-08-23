@@ -1,8 +1,14 @@
 <template>
   <div class="container welcome">
     <p>ようこそ!</p>
-    <LoginForm />
-    <SignupForm />
+    <div v-if="shouldShowLoginForm">
+      <LoginForm @redirectToChatRoom="redirectToChatRoom" />
+      <p class="change-form">初めての方は<span @click="shouldShowLoginForm = false">こちら</span>をクリック</p>
+    </div>
+    <div v-if="!shouldShowLoginForm">
+      <SignupForm @redirectToChatRoom="redirectToChatRoom" />
+      <p class="change-form">アカウントをお持ちの方は<span @click="shouldShowLoginForm = true">こちら</span>をクリック</p>
+    </div>
   </div>
 </template>
 
@@ -11,6 +17,18 @@
   import SignupForm from '../components/SignupForm.vue'
   export default {
     components: { LoginForm, SignupForm },
+    data() {
+      return {
+        shouldShowLoginForm: true
+      }
+    },
+    methods: {
+      redirectToChatRoom() {
+        // 指定のページへリダイレクトさせるための処理
+        // this.$router.push({ name: 'リダイレクトさせたいページのname' })
+        this.$router.push({ name: 'Chatroom' })
+      }
+    }
   }
 </script>
 
@@ -44,5 +62,9 @@
   }
   .welcome button {
     margin: 20px auto;
+  }
+  .change-form {
+    font-size: 14px;
+    margin: 10px;
   }
 </style>
