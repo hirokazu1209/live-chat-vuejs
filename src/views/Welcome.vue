@@ -1,52 +1,46 @@
 <template>
-  <div>
-    <h1>{{ title }}</h1>
-    <!-- データを子コンポーネントに渡している -->
-    <!-- :<props名>="<データの名前>" -->
-    <!-- <TestComponent :isEnabled="isEnabled" message="コンポーネントにデータが渡されています" /> -->
-
-    <!-- toggleという名前に一致する親コンポーネントのメソッドが実行される -->
-    <!-- @toggleは子コンポーネントのthis.$emit('toggle')に紐づいている -->
-    <!-- "toggle"はWelcome.vueのメソッド名であるtoggleに紐づいている -->
-    <TestComponent @toggle="toggle" message="コンポーネントにデータが渡されています" />
-    <p v-if="isEnabled">こんにちは</p>
+  <div class="container welcome">
+    <p>ようこそ!</p>
+    <LoginForm />
   </div>
 </template>
 
 <script>
-import TestComponent from '../components/TestComponent.vue'
-
-export default {
-  components: {
-    TestComponent
-  },
-  data() {
-    return {
-      title: '初めてのVue.jsアプリです!',
-      subtitle: 'ようこそ',
-      isEnabled: true
-    }
-  },
-  computed: {
-    text() {
-      if(this.isEnabled) {
-        return 'こんにちは！'
-      } else {
-        return 'さよなら'
-      }
-    }
-  },
-  methods: {
-    toggle() {
-      this.isEnabled = !this.isEnabled
-    }
+  import LoginForm from '../components/LoginForm.vue'
+  export default {
+    components: { LoginForm },
   }
-}
 </script>
 
-<style scoped>
-  p {
-    font-size: 20px;
-    color: red;
+<style>
+  .welcome {
+    text-align: center;
+    padding: 20px 0;
+  }
+
+  .welcome form {
+    width: 300px;
+    margin: 20px auto;
+  }
+  .welcome label {
+    display: block;
+    margin: 20px 0 10px;
+  }
+  .welcome input {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px auto;
+    border-radius: 4px;
+    border: 1px solid #eee;
+    outline: none;
+    box-sizing: border-box;
+  }
+  .welcome span{
+    font-weight: bold;
+    text-decoration: underline;
+    cursor: pointer;
+  }
+  .welcome button {
+    margin: 20px auto;
   }
 </style>
