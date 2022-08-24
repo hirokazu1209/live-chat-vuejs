@@ -14,7 +14,7 @@
             </div>
             {{ message.likes.length }}
           </div>
-          <span class="created-at">{{ message.created_at }}</span>
+          <span class="created-at">{{ message.created_at }}前</span>
         </li>
       </ul>
     </div>
