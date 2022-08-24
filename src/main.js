@@ -3,6 +3,10 @@ import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router'
 import './assets/main.css'
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome"
+import { library } from "@fortawesome/fontawesome-svg-core"
+import { faHeart } from "@fortawesome/free-solid-svg-icons"
 
-// Vue.jsアプリを動かすためのさまざまな機能が構築・用意されている
-createApp(App).use(router).mount('#app')
+library.add(faHeart)
+createApp(App).use(router).component("font-awesome-icon", FontAwesomeIcon).mount('#app')
+// ======= 👆 ここまで追加する =======

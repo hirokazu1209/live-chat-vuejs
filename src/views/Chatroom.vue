@@ -1,18 +1,20 @@
 <template>
   <div class="container">
     <Navbar />
-    <ChatWindow :messages="messages" />
+    <ChatWindow @connectCable="connectCable" :messages="messages" />
+    <NewChatForm @connectCable="connectCable"/>
   </div>
 </template>
 
 <script>
 import Navbar from '../components/Navbar.vue'
 import ChatWindow from '../components/ChatWindow.vue'
-
-import axios from 'axios' 
+import NewChatForm from '../components/NewChatForm.vue'
+import axios from 'axios'
+import ActionCable from 'actioncable'
 
 export default {
-  components: { Navbar, ChatWindow },
+  components: { Navbar, ChatWindow, NewChatForm },
   data() {
     return {
       messages: []
@@ -37,10 +39,32 @@ export default {
         console.log(err)
       }
     },
+    // 子コンポーネントからmessageデータが引数として渡される
+    connectCable(message){
+      // this.messageChannelと接続し、Ruby on Railsのreceiveメソッドを実行するように指定
+      this.messageChannel.perform('receive', {
+        message: message,
+        email: window.localStorage.getItem('uid')
+      })
+    }
   },
   mounted() {
-    this.getMessages()
+    // Ruby on RailsのAction Cableとコネクションを確立している部分
+    const cable = ActionCable.createConsumer('ws://localhost:3000/cable')
+    this.messageChannel = cable.subscriptions.create('RoomChannel', {
+      connected: () => {
+        this.getMessages()
+      },
+      // Ruby on RailsのAction Cableから何らかのデータが送られてきた時に実行するメソッドを記述
+      received: () => {
+        this.getMessages()
+      }
+    })
   },
+  // コネクションを削除（ページを移動したり、ブラウザを閉じる時に実行）
+  beforeUnmount() {
+    this.messageChannel.unsubscribe()
+  }
 }
 </script>
 
